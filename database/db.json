@@ -91,7 +91,7 @@
   ],
   "plantas": [
     {
-      "id": "1",
+      "id": "plt1",
       "name": "Planta Trắng",
       "price": "250.000",
       "img": "https://i.pinimg.com/474x/99/a9/07/99a9077b2fa7c97deade2a81c51c13f4.jpg",
@@ -100,7 +100,7 @@
       "description": "Chậu câu màu trắng, dùng để trồng cây"
     },
     {
-      "id": "2",
+      "id": "plt12",
       "name": "Planta Đen",
       "price": "250.000",
       "img": "https://i.pinimg.com/474x/3e/11/78/3e11786e5920acb41216280c0303c180.jpg",
@@ -109,7 +109,7 @@
       "description": "Chậu câu màu đen, dùng để trồng cây"
     },
     {
-      "id": "3",
+      "id": "plt13",
       "name": "Planta Đen",
       "price": "250.000",
       "img": "https://i.pinimg.com/474x/3e/11/78/3e11786e5920acb41216280c0303c180.jpg",
@@ -118,7 +118,7 @@
       "description": "Chậu câu màu đen, dùng để trồng cây"
     },
     {
-      "id": "4",
+      "id": "plt14",
       "name": "Planta Đen",
       "price": "250.000",
       "img": "https://i.pinimg.com/474x/9f/0b/67/9f0b67cf757657051fe32ab4efaeb340.jpg",
