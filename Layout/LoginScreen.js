@@ -1,11 +1,16 @@
 import { Image, StyleSheet, Text, TextInput, View, CheckBox, TouchableOpacity, ToastAndroid, KeyboardAvoidingView, Platform, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { URL } from './HomeScreen'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const LoginScreen = (props) => {
     const [email, setemail] = useState('')
     const [pass, setpass] = useState('')
-    const [showPass, setshowPass] = useState(true)
+    const [showPass, setshowPass] = useState(true);
+    const [checkRemember, setcheckRemember] = useState(false);
+
+
 
     const CheckLogin = async () => {
         if (email == '') {
@@ -34,12 +39,53 @@ const LoginScreen = (props) => {
                     ToastAndroid.show('Pass không chính xác',0)
                     return false;
                 } else {
+                    AsyncStorage.setItem('User', JSON.stringify(user));
+                    rememberAccount();
                     ToastAndroid.show('Login thành công',0)
                     props.navigation.navigate('Main');
                 }
 
             })
     }
+
+    
+    // hàm checkremember
+    const rememberAccount = async () => {
+        try {
+            if (checkRemember) {
+                await AsyncStorage.setItem('email', email);
+                await AsyncStorage.setItem('pass', pass);
+            } else {
+                await AsyncStorage.setItem('email', '');
+                await AsyncStorage.setItem('pass', '');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // hàm lấy thông tin từ asyncStorage
+    const retrieveData = async () => {
+        try {
+            const storedemail = await AsyncStorage.getItem('email');
+            const storedPassword = await AsyncStorage.getItem('pass');
+            if (storedemail !== null && storedPassword !== null) {
+                setemail(storedemail);
+                setpass(storedPassword);
+                setcheckRemember(true);
+            } else {
+                setpass('');
+                setcheckRemember(false);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        retrieveData()
+    }, [])
+
 
     return (
         <KeyboardAvoidingView
@@ -53,12 +99,14 @@ const LoginScreen = (props) => {
                     <TextInput style={[styles.input, { width: '90' }]}
                         placeholder='Nhập email hoặc số điện thoại' onChangeText={(txt) => {
                             setemail(txt)
-                        }} />
+                        }} 
+                        value={email || ''}/>
                     <View style={styles.input}>
                         <TextInput style={{width: '90%'}} secureTextEntry={showPass ? true : false}
                             placeholder='Nhập mật khẩu' onChangeText={(txt) => {
                                 setpass(txt)
-                            }} />
+                            }}
+                            value={pass || ''} />
                         <TouchableOpacity onPress={()=>setshowPass(!showPass)}>
                             <Image style={{ width: 20, height: 20 }}
                                 source={ showPass ? require('../Image/visible.png') : require('../Image/invisible.png')} />
@@ -66,9 +114,9 @@ const LoginScreen = (props) => {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={()=>setcheckRemember(!checkRemember)}>
                                 <Image style={{ width: 20, height: 20 }}
-                                    source={require('../Image/check.png')} />
+                                    source={checkRemember ? require('../Image/check.png') : require('../Image/circle.png')} />
                             </TouchableOpacity>
                             <Text style={{ marginLeft: 10 }}>Nhớ tài khoản</Text>
                         </View>

@@ -77,7 +77,7 @@ const CartScreen = ({ navigation }) => {
                     <Text>Tạm tính :</Text>
                     <Text style={{ fontSize: 17, fontWeight: 'bold' }}>{formatPrice(totalPrice)}</Text>
                 </View>
-                <TouchableOpacity onPress={() => { navigation.navigate('Payment') }}
+                <TouchableOpacity onPress={() => { navigation.navigate('Payment',{total : totalPrice}) }}
                     style={{
                         borderRadius: 9, padding: 12, alignItems: 'center', backgroundColor: 'green',
                     }}>
