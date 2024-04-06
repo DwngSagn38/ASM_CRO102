@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
 
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ width: '100%', height: 320 }}>
                     <Image
                         style={{ width: '100%', height: '100%', justifyContent: 'center' }}

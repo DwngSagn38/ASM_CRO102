@@ -2,7 +2,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import React from 'react'
 
 const PlantSceen = ({ navigation, route }) => {
-    const { data } = route.params;
+    const data = route.params?.data;
 
     return (
         <View style={styles.container}>

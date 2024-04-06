@@ -27,7 +27,7 @@ const LoginScreen = (props) => {
         console.log(url);
         fetch(url)
             .then(res => res.json())
-            .then(data => {
+            .then(async data => {
                 console.log(data);
                 if (data.length != 1) {
                     ToastAndroid.show('Email không chính xác',0);
@@ -39,7 +39,7 @@ const LoginScreen = (props) => {
                     ToastAndroid.show('Pass không chính xác',0)
                     return false;
                 } else {
-                    AsyncStorage.setItem('User', JSON.stringify(user));
+                    await AsyncStorage.setItem('User', JSON.stringify(user));
                     rememberAccount();
                     ToastAndroid.show('Login thành công',0)
                     props.navigation.navigate('Main');

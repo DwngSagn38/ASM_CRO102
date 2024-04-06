@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { addItem, congItem, removeItem, truItem } from "./action";
+import { addItem, congItem, removeAllItem, removeItem, truItem } from "./action";
 
 const initialState = {
     items: [],
@@ -30,6 +30,9 @@ const cartReducer = createReducer(initialState, builder => {
         if (!existingItem) {
             state.items.push({ ...action.payload, quantity: 1 });
         }
+    })
+    .addCase(removeAllItem,(state, action) => {
+        state.items = [];
     })
 });
 

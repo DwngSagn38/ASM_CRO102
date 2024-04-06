@@ -2,9 +2,13 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { congItem, removeItem, truItem } from '../Redux/action';
+import { URL } from './HomeScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 const CartScreen = ({ navigation }) => {
 
+    const [date, setdate] = useState(new Date());
     const cartItems = useSelector(state => state.cart.items);
     const dispatch = useDispatch();
     const [totalPrice, setTotalPrice] = useState(0);
@@ -25,6 +29,27 @@ const CartScreen = ({ navigation }) => {
         // Sử dụng phương thức toLocaleString để định dạng giá theo định dạng tiền tệ của Việt Nam (VND)
         return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
     };
+
+    const TaoMaHoaDon = async () => {
+        const url = `${URL}/hoadons`
+        const NewHoaDon = {
+            ngayMua: date
+        };
+
+        const res = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(NewHoaDon),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            const id = data.id;
+            navigation.navigate('Payment', { total: totalPrice, id_bill: id })
+            console.log("id_bill : " + id)
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -72,18 +97,24 @@ const CartScreen = ({ navigation }) => {
 
             </ScrollView>
 
-            <View style={{ width: '90%', marginVertical: 20, marginHorizontal: '5%', gap: 20 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text>Tạm tính :</Text>
-                    <Text style={{ fontSize: 17, fontWeight: 'bold' }}>{formatPrice(totalPrice)}</Text>
+            {cartItems.length > 0
+                ? <View style={{ width: '90%', marginVertical: 20, marginHorizontal: '5%', gap: 20 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text>Tạm tính :</Text>
+                        <Text style={{ fontSize: 17, fontWeight: 'bold' }}>{formatPrice(totalPrice)}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => { TaoMaHoaDon() }}
+                        style={{
+                            borderRadius: 9, padding: 12, alignItems: 'center', backgroundColor: 'green',
+                        }}>
+                        <Text style={{ color: 'white' }}>Tiến hành thanh toán</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => { navigation.navigate('Payment',{total : totalPrice}) }}
-                    style={{
-                        borderRadius: 9, padding: 12, alignItems: 'center', backgroundColor: 'green',
-                    }}>
-                    <Text style={{ color: 'white' }}>Tiến hành thanh toán</Text>
-                </TouchableOpacity>
-            </View>
+                : <TouchableOpacity onPress={() => { navigation.navigate('SearchScreen') }}
+                    style={{ position: 'absolute', top: '50%', width: '100%' }}>
+                    <Text style={{ textAlign: 'center' }}>Giỏ hàng rỗng
+                        {'\n'}Thêm sản phẩm vào giỏ hàng</Text>
+                </TouchableOpacity>}
         </View>
     );
 };
@@ -93,13 +124,13 @@ const styles = {
         flex: 1,
         padding: 20,
         gap: 16
-      },
-      header: {
+    },
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 20
-      },
+    },
     item: {
         height: 160,
         flexDirection: 'row',
